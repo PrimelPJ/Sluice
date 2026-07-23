@@ -1,0 +1,34 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements-dev.txt
+      - name: Unit tests
+        run: PYTHONPATH=src python -m pytest tests/ -q
+      - name: Lint
+        run: |
+          python -m pyflakes src tests
+          python -m py_compile $(find src -name '*.py')
+
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - name: Stage layer
+        run: ./scripts/package_lambdas.sh
+      - name: Format check
+        run: cd infra && terraform fmt -check -recursive
+      - name: Validate
+        run: cd infra && terraform init -backend=false && terraform validate

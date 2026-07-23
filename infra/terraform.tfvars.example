@@ -1,0 +1,13 @@
+project     = "sluice"
+environment = "dev"
+region      = "us-east-1"
+
+products        = ["BTC-USD", "ETH-USD", "SOL-USD"]
+source_base_url = "https://api.exchange.coinbase.com"
+
+ingest_schedule   = "rate(1 minute)"
+curation_schedule = "cron(5 * * * ? *)"
+
+kinesis_shard_count     = 1
+firehose_buffer_seconds = 60
+log_retention_days      = 14
