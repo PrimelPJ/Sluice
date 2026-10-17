@@ -11,6 +11,9 @@ from dataclasses import dataclass
 from functools import lru_cache
 
 
+DEFAULT_PRODUCTS = "BTC-USD,ETH-USD,SOL-USD,XRP-USD"
+
+
 def _require(name: str) -> str:
     val = os.environ.get(name)
     if not val:
@@ -48,7 +51,7 @@ class ServingConfig:
 
 @lru_cache(maxsize=1)
 def producer_config() -> ProducerConfig:
-    raw = os.environ.get("PRODUCTS", "BTC-USD,ETH-USD,SOL-USD")
+    raw = os.environ.get("PRODUCTS", DEFAULT_PRODUCTS)
     return ProducerConfig(
         stream_name=_require("STREAM_NAME"),
         products=tuple(p.strip() for p in raw.split(",") if p.strip()),
