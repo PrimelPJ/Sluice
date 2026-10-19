@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from functools import lru_cache
 
 
-DEFAULT_PRODUCTS = "BTC-USD,ETH-USD,SOL-USD,XRP-USD,LINK-USD,AVAX-USD"
+DEFAULT_PRODUCTS = "BTC-USD,ETH-USD,SOL-USD,XRP-USD,LINK-USD,AVAX-USD,DOT-USD,MATIC-USD"
 
 
 def _require(name: str) -> str:
