@@ -33,6 +33,7 @@ class ProducerConfig:
 class TransformConfig:
     schema_version: int
     max_staleness_seconds: int
+    max_retries: int
 
 
 @dataclass(frozen=True)
@@ -67,6 +68,7 @@ def transform_config() -> TransformConfig:
     return TransformConfig(
         schema_version=int(os.environ.get("SCHEMA_VERSION", "1")),
         max_staleness_seconds=int(os.environ.get("MAX_STALENESS_SECONDS", "120")),
+        max_retries=int(os.environ.get("MAX_RETRIES", "3")),
     )
 
 
