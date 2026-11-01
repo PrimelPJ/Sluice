@@ -98,10 +98,10 @@ data "archive_file" "serving" {
 # Modules
 # ---------------------------------------------------------------------------
 module "catalog" {
-  source          = "./modules/catalog"
-  name_prefix     = local.name_prefix
-  data_bucket     = aws_s3_bucket.data.bucket
-  results_bucket  = aws_s3_bucket.athena_results.bucket
+  source         = "./modules/catalog"
+  name_prefix    = local.name_prefix
+  data_bucket    = aws_s3_bucket.data.bucket
+  results_bucket = aws_s3_bucket.athena_results.bucket
 }
 
 module "serving" {
@@ -127,34 +127,34 @@ module "ingestion" {
 }
 
 module "delivery" {
-  source              = "./modules/delivery"
-  name_prefix         = local.name_prefix
-  lambda_zip          = data.archive_file.transform.output_path
-  lambda_hash         = data.archive_file.transform.output_base64sha256
-  layer_arn           = aws_lambda_layer_version.common.arn
-  data_bucket_arn     = aws_s3_bucket.data.arn
-  stream_arn          = module.ingestion.stream_arn
-  glue_database       = module.catalog.database_name
-  glue_table          = module.catalog.enriched_table
-  buffer_seconds      = var.firehose_buffer_seconds
-  log_retention_days  = var.log_retention_days
+  source             = "./modules/delivery"
+  name_prefix        = local.name_prefix
+  lambda_zip         = data.archive_file.transform.output_path
+  lambda_hash        = data.archive_file.transform.output_base64sha256
+  layer_arn          = aws_lambda_layer_version.common.arn
+  data_bucket_arn    = aws_s3_bucket.data.arn
+  stream_arn         = module.ingestion.stream_arn
+  glue_database      = module.catalog.database_name
+  glue_table         = module.catalog.enriched_table
+  buffer_seconds     = var.firehose_buffer_seconds
+  log_retention_days = var.log_retention_days
 }
 
 module "curation" {
-  source             = "./modules/curation"
-  name_prefix        = local.name_prefix
-  lambda_zip         = data.archive_file.loader.output_path
-  lambda_hash        = data.archive_file.loader.output_base64sha256
-  layer_arn          = aws_lambda_layer_version.common.arn
-  athena_database    = module.catalog.database_name
-  athena_workgroup   = module.catalog.workgroup_name
-  curated_table      = module.catalog.curated_table
-  athena_output      = module.catalog.results_location
-  data_bucket_arn    = aws_s3_bucket.data.arn
-  results_bucket_arn = aws_s3_bucket.athena_results.arn
-  serving_table_name = module.serving.table_name
-  serving_table_arn  = module.serving.table_arn
+  source              = "./modules/curation"
+  name_prefix         = local.name_prefix
+  lambda_zip          = data.archive_file.loader.output_path
+  lambda_hash         = data.archive_file.loader.output_base64sha256
+  layer_arn           = aws_lambda_layer_version.common.arn
+  athena_database     = module.catalog.database_name
+  athena_workgroup    = module.catalog.workgroup_name
+  curated_table       = module.catalog.curated_table
+  athena_output       = module.catalog.results_location
+  data_bucket_arn     = aws_s3_bucket.data.arn
+  results_bucket_arn  = aws_s3_bucket.athena_results.arn
+  serving_table_name  = module.serving.table_name
+  serving_table_arn   = module.serving.table_arn
   schedule_expression = var.curation_schedule
-  agg_sql            = file("${path.module}/../sql/agg_ohlcv.sql")
-  log_retention_days = var.log_retention_days
+  agg_sql             = file("${path.module}/../sql/agg_ohlcv.sql")
+  log_retention_days  = var.log_retention_days
 }

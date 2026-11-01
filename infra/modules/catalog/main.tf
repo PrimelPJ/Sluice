@@ -3,10 +3,10 @@ variable "data_bucket" { type = string }
 variable "results_bucket" { type = string }
 
 locals {
-  db_name        = replace("${var.name_prefix}", "-", "_")
-  data_location  = "s3://${var.data_bucket}/enriched/"
-  curated_loc    = "s3://${var.data_bucket}/curated/ticks_ohlcv_hourly/"
-  results_loc    = "s3://${var.results_bucket}/query-results/"
+  db_name       = replace("${var.name_prefix}", "-", "_")
+  data_location = "s3://${var.data_bucket}/enriched/"
+  curated_loc   = "s3://${var.data_bucket}/curated/ticks_ohlcv_hourly/"
+  results_loc   = "s3://${var.results_bucket}/query-results/"
 }
 
 resource "aws_glue_catalog_database" "this" {
@@ -20,17 +20,17 @@ resource "aws_glue_catalog_table" "enriched" {
   table_type    = "EXTERNAL_TABLE"
 
   parameters = {
-    classification                     = "parquet"
-    "projection.enabled"               = "true"
-    "projection.dt.type"               = "date"
-    "projection.dt.format"             = "yyyy-MM-dd"
-    "projection.dt.range"              = "2024-01-01,NOW"
-    "projection.dt.interval"           = "1"
-    "projection.dt.interval.unit"      = "DAYS"
-    "projection.hr.type"               = "integer"
-    "projection.hr.range"              = "0,23"
-    "projection.hr.digits"             = "2"
-    "storage.location.template"        = "${local.data_location}dt=$${dt}/hr=$${hr}/"
+    classification                = "parquet"
+    "projection.enabled"          = "true"
+    "projection.dt.type"          = "date"
+    "projection.dt.format"        = "yyyy-MM-dd"
+    "projection.dt.range"         = "2024-01-01,NOW"
+    "projection.dt.interval"      = "1"
+    "projection.dt.interval.unit" = "DAYS"
+    "projection.hr.type"          = "integer"
+    "projection.hr.range"         = "0,23"
+    "projection.hr.digits"        = "2"
+    "storage.location.template"   = "${local.data_location}dt=$${dt}/hr=$${hr}/"
   }
 
   partition_keys {

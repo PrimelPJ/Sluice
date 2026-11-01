@@ -164,8 +164,8 @@ resource "aws_sfn_state_machine" "curation" {
         Next = "LoadServingSnapshot"
       }
       LoadServingSnapshot = {
-        Type       = "Task"
-        Resource   = "arn:aws:states:::lambda:invoke"
+        Type     = "Task"
+        Resource = "arn:aws:states:::lambda:invoke"
         Parameters = {
           FunctionName = aws_lambda_function.loader.arn
           Payload      = {}
