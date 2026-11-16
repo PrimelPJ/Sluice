@@ -35,6 +35,7 @@ class TransformConfig:
     max_staleness_seconds: int
     max_retries: int
     batch_window_seconds: int
+    max_batch_size: int
 
 
 @dataclass(frozen=True)
@@ -71,6 +72,7 @@ def transform_config() -> TransformConfig:
         max_staleness_seconds=int(os.environ.get("MAX_STALENESS_SECONDS", "120")),
         max_retries=int(os.environ.get("MAX_RETRIES", "3")),
         batch_window_seconds=int(os.environ.get("BATCH_WINDOW_SECONDS", "60")),
+        max_batch_size=int(os.environ.get("MAX_BATCH_SIZE", "1000")),
     )
 
 
