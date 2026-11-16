@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from functools import lru_cache
 
 
-DEFAULT_PRODUCTS = "BTC-USD,ETH-USD,SOL-USD,XRP-USD,BNB-USD,LINK-USD,AVAX-USD,DOT-USD,MATIC-USD,LTC-USD,ADA-USD,DOGE-USD,UNI-USD,ATOM-USD,TRX-USD,NEAR-USD,APT-USD,OP-USD,ARB-USD,FIL-USD,AAVE-USD,ALGO-USD,IMX-USD,SUI-USD,SEI-USD,SHIB-USD,WLD-USD,TIA-USD,INJ-USD,FTM-USD,JUP-USD,PEPE-USD,WIF-USD"
+DEFAULT_PRODUCTS = "BTC-USD,ETH-USD,SOL-USD,XRP-USD,BNB-USD,LINK-USD,AVAX-USD,DOT-USD,MATIC-USD,LTC-USD,ADA-USD,DOGE-USD,UNI-USD,ATOM-USD,TRX-USD,NEAR-USD,APT-USD,OP-USD,ARB-USD,FIL-USD,AAVE-USD,ALGO-USD,IMX-USD,SUI-USD,SEI-USD,SHIB-USD,WLD-USD,TIA-USD,INJ-USD,FTM-USD,JUP-USD,PEPE-USD,WIF-USD,TON-USD,PYTH-USD,STRK-USD,ENA-USD"
 
 
 def _require(name: str) -> str:
@@ -35,6 +35,7 @@ class TransformConfig:
     max_staleness_seconds: int
     max_retries: int
     batch_window_seconds: int
+    max_batch_size: int
 
 
 @dataclass(frozen=True)
@@ -71,6 +72,7 @@ def transform_config() -> TransformConfig:
         max_staleness_seconds=int(os.environ.get("MAX_STALENESS_SECONDS", "120")),
         max_retries=int(os.environ.get("MAX_RETRIES", "3")),
         batch_window_seconds=int(os.environ.get("BATCH_WINDOW_SECONDS", "60")),
+        max_batch_size=int(os.environ.get("MAX_BATCH_SIZE", "1000")),
     )
 
 
