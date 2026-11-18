@@ -50,6 +50,7 @@ class LoaderConfig:
 @dataclass(frozen=True)
 class ServingConfig:
     table_name: str
+    query_timeout_seconds: int
 
 
 @lru_cache(maxsize=1)
@@ -89,4 +90,7 @@ def loader_config() -> LoaderConfig:
 
 @lru_cache(maxsize=1)
 def serving_config() -> ServingConfig:
-    return ServingConfig(table_name=_require("SERVING_TABLE"))
+    return ServingConfig(
+        table_name=_require("SERVING_TABLE"),
+        query_timeout_seconds=int(os.environ.get("QUERY_TIMEOUT_SECONDS", "10")),
+    )
