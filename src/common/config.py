@@ -92,5 +92,5 @@ def loader_config() -> LoaderConfig:
 def serving_config() -> ServingConfig:
     return ServingConfig(
         table_name=_require("SERVING_TABLE"),
-        query_timeout_seconds=int(os.environ.get("QUERY_TIMEOUT_SECONDS", "10")),
+        query_timeout_seconds=int(os.environ.get("QUERY_TIMEOUT_SECONDS", "15")),
     )
