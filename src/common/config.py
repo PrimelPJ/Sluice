@@ -51,6 +51,7 @@ class LoaderConfig:
 class ServingConfig:
     table_name: str
     query_timeout_seconds: int
+    max_rows: int
 
 
 @lru_cache(maxsize=1)
@@ -93,4 +94,5 @@ def serving_config() -> ServingConfig:
     return ServingConfig(
         table_name=_require("SERVING_TABLE"),
         query_timeout_seconds=int(os.environ.get("QUERY_TIMEOUT_SECONDS", "15")),
+        max_rows=int(os.environ.get("QUERY_MAX_ROWS", "500")),
     )
